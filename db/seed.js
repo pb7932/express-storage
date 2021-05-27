@@ -5,10 +5,12 @@ const Product = require('../models/Product');
 let seed = async function() {
     try {
         db.authenticate().then(console.log('[DB] Authentication completed.'));
-        Product.sync().then(console.log('[DB] Table Product created.'));
+        await Product.drop().then(console.log('[DB] Dropped a table'));
 
+        await Product.sync({force: true}).then(console.log('[DB] Table Product created.'));
+        
         const prod = await Product.create({name: "Coca-cola", price: 16, ingredients: "sugar,secret-sauce", calories: 200, quantity: 1, url: "https://i2.wp.com/shop.stridon.hr/wp-content/uploads/2020/05/Coca-Cola-025L.jpg?fit=1200%2C1200&ssl=1"});
-    
+        
     
         const prod2 = await Product.create({name: "Fanta", price: 15, 
         ingredients: "sugar,secret-sauce,orange", calories: 150,

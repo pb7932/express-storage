@@ -1,12 +1,19 @@
 const Product = require('../models/Product');
 const db = require('../db/index');
+const { Op } = require('sequelize');
 
 exports.findAll = async (req, res) => {
+    const name = req.query.name;
+    var condition = name ? { name: { [Op.like]: `%${name}%`}} : null;
+
     try {
-        const products = await Product.findAll();
+        const products = await Product.findAll({
+            where : condition
+        });
         res.send(products);
     }
     catch(err) {
+        console.log(err);
        res.status(500).send({
            message: 
                 err.message || 'An error occured while retrieving products.'
@@ -21,6 +28,7 @@ exports.findById = async (req, res) => {
         res.send(product);
     }
     catch (err) {
+        console.log(err);
         res.status(500).send({
             message: 
                 err.message || 'An error occured while retrieving the reqested product.'
@@ -45,9 +53,74 @@ exports.create = async (req, res) => {
         res.send(product);
     }
     catch (err) {
+        console.log(err);
         res.status(500).send({
             message:
                 err.message || 'An error occured while creating a product.'
         });
     }
+}
+
+exports.update = async (req, res) => {
+    const id = req.params.id;
+    const product = {
+        name: req.body.name,
+        price: req.body.price,
+        ingredients: req.body.ingredients,
+        calories: req.body.calories,
+        quantity: req.body.quantity,
+        url: req.body.url
+    };
+
+    try {
+        product = await Product.update(product, {
+            where: {
+                id: id
+            }
+        });
+        res.send(product);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({
+            message:
+                err.message || 'An error occures while updating a product.'
+        });
+    }    
+}
+
+exports.deleteAll = async (req, res) => {
+    try {
+        await Product.destroy({
+            truncate: true
+        });
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({
+            message:
+                err.message || 'An error occured while deleting all products.'
+        });
+    }
+}
+
+exports.delete = async (req, res) => {
+    const id = req.params.id;
+    try {
+        await Product.destroy({
+            where: {
+                id: id
+            }
+        });
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({
+            message:
+                err.message || 'An error occured while deleting a product.'
+        });
+    }
+
 }
