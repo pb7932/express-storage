@@ -1,0 +1,16 @@
+{
+  "name": "express-storage",
+  "version": "1.0.0",
+  "description": "Connectiong angular-storage with Postgres",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "sequelize",
+    "postgre"
+  ],
+  "author": "Petar",
+  "license": "ISC"
+}
