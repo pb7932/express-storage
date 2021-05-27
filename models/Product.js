@@ -27,7 +27,8 @@ const Product = db.define('Product', {
     },
     quantity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 1
     },
     url: {
         type: DataTypes.STRING,
