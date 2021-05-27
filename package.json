@@ -4,6 +4,7 @@
   "description": "Connectiong angular-storage with Postgres",
   "main": "server.js",
   "scripts": {
+    "run": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -12,5 +13,11 @@
     "postgre"
   ],
   "author": "Petar",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.2"
+  }
 }
