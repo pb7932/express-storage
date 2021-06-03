@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const db = require('./db/index');
-//const seed = require('./db/seed');
+const seed = require('./db/seed');
 
 db.authenticate().then(console.log('[DB] Authentication completed.'));
 //seed().then(console.log('[DB] Seed completed.'));

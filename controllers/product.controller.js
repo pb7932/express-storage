@@ -1,14 +1,19 @@
 const Product = require('../models/Product');
 const db = require('../db/index');
 const { Op } = require('sequelize');
+const sequelize = require('../db/index');
 
 exports.findAll = async (req, res) => {
     const name = req.query.name;
-    var condition = name ? { name: { [Op.like]: `%${name}%`}} : null;
+    //var condition = name ? { name: { [Op.like]: `%${name}%`}} : null;
 
     try {
-        const products = await Product.findAll({
-            where : condition
+        const products= name ? (await sequelize.query(`SELECT * FROM public."Product" 
+                                                        WHERE LOWER(name) LIKE '%${name}%'`))[0] : 
+                                await Product.findAll({
+                                        order: [
+                                            ['name', 'ASC']
+                                        ]
         });
         res.send(products);
     }
@@ -37,7 +42,7 @@ exports.findById = async (req, res) => {
 }
 
 exports.create = async (req, res) => {
-    const product = {
+    let product = {
         name: req.body.name,
         price: req.body.price,
         ingredients: req.body.ingredients,
@@ -63,7 +68,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     const id = req.params.id;
-    const product = {
+    let product = {
         name: req.body.name,
         price: req.body.price,
         ingredients: req.body.ingredients,
