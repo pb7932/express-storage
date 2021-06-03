@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const { body, validationResult} = require('express-validator');
 const db = require('../db/index');
 const { Op } = require('sequelize');
 const sequelize = require('../db/index');
@@ -42,6 +43,12 @@ exports.findById = async (req, res) => {
 }
 
 exports.create = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error');
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     let product = {
         name: req.body.name,
         price: req.body.price,
@@ -67,6 +74,12 @@ exports.create = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error');
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const id = req.params.id;
     let product = {
         name: req.body.name,
