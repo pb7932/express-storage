@@ -1,6 +1,20 @@
 const Product = require('../models/Product');
-const sequelize = require('../db/index');
+const query = require('../db/index');
+const app = require('../server');
 
 exports.createHistory = async (req, res, next) => {
-    //create new history_cnt table
+    if( req.app.global.data.counter == undefined )
+        req.app.global.data.counter = 0;
+
+    ++req.app.global.data.counter;
+    req.app.global.store();
+
+    res.send('counter: ' + req.app.global.data.counter);
+}
+
+exports.initCounter = (req, res, next) => {
+    req.app.global.data.counter = 0;
+    req.app.global.store();
+
+    res.send('counter: ' + req.app.global.data.counter);
 }
