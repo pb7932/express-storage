@@ -1,7 +1,7 @@
-const db = require('../db/index');
+const {sequelize} = require('../db/index');
 const { DataTypes } = require('sequelize');
 
-const Product = db.define('Product', {
+const Product = sequelize.define('Product', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,

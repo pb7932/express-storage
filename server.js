@@ -2,10 +2,10 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const db = require('./db/index');
+const {sequelize} = require('./db/index');
 const seed = require('./db/seed');
 
-db.authenticate().then(console.log('[DB] Authentication completed.'));
+sequelize.authenticate().then(console.log('[DB] Authentication completed.'));
 //seed().then(console.log('[DB] Seed completed.'));
 
 app.use((req, res, next) => {
@@ -22,8 +22,10 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 const productRouter = require('./routes/product.routes');
-app.use('/api/products', productRouter);
+const historyRouter = require('./routes/history.routes');
 
+app.use('/api/products', productRouter);
+app.use('/api/history', historyRouter);
 app.get('/', (req,res) => {
     res.send('Welcome to my server!');
 })

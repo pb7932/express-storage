@@ -1,8 +1,7 @@
 const Product = require('../models/Product');
 const { body, validationResult} = require('express-validator');
-const db = require('../db/index');
 const { Op } = require('sequelize');
-const sequelize = require('../db/index');
+const {sequelize} = require('../db/index');
 
 exports.findAll = async (req, res) => {
     const name = req.query.name;
