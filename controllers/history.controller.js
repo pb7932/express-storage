@@ -1,5 +1,5 @@
 const Product = require('../models/Product');
-const query = require('../db/index');
+const {query} = require('../db/index');
 const app = require('../server');
 
 exports.createHistory = async (req, res, next) => {
@@ -18,3 +18,23 @@ exports.initCounter = (req, res, next) => {
 
     res.send('counter: ' + req.app.global.data.counter);
 }
+
+exports.getHistory = async (req, res, next) => {
+    let counter = req.app.global.data.counter;
+
+    if(counter && counter > 0) {
+        let version = (req.query.version <= counter && req.query.version > 0) ? req.query.version : counter;
+
+        const sql = `SELECT * FROM history${version}`;
+        const result = await (await query(sql, [])).rows;
+
+        console.log(result);
+
+        res.send(result);
+    }
+    else {
+        console.log('no history table has been made yet');
+        res.send(null);
+    }
+}
+    
