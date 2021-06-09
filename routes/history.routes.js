@@ -8,4 +8,6 @@ router.get('/init', history.initCounter);
 
 router.post('/', history.createHistory);
 
+router.get('/:date', history.getHistoryByDate);
+
 module.exports = router;
