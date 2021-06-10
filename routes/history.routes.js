@@ -4,9 +4,11 @@ const history = require('../controllers/history.controller');
 
 router.get('/', history.getHistory);
 
-router.get('/init', history.initCounter);
-
 router.post('/', history.createHistory);
+
+router.get('/delete', history.initHistoryState);
+
+router.get('/init', history.initCounter);
 
 router.get('/:date', history.getHistoryByDate);
 

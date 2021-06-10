@@ -52,6 +52,37 @@ exports.initCounter = (req, res, next) => {
     res.send('counter: ' + req.app.global.data.counter);
 }
 
+exports.initHistoryState = async (req, res) => {
+    const sqlGetLatestHistoryVersion = `SELECT version FROM history_version ORDER BY version DESC LIMIT 1`;
+    const sqlDeleteHistoryVersion = `DELETE FROM history_version WHERE version IS NOT NULL`;
+    const sqlDeleteHistoryTables = `DROP TABLE history`;
+
+    try {
+        let versionResult = await (await query(sqlGetLatestHistoryVersion, [])).rows[0];
+        
+        if(!versionResult || versionResult.version < 1) {
+            res.send('No history tables for deletion.')
+            return;
+        }
+        
+        let latestVersion = versionResult.version;
+
+        await query(sqlDeleteHistoryVersion, []);
+
+        for(let i = 1; i <= latestVersion; i++) {
+            await query(sqlDeleteHistoryTables + i);
+        }
+
+        req.app.global.data.counter = 0;
+        req.app.global.store();
+
+        res.send(200);
+    }
+    catch (err) {
+        console.log('An error occured while initializing history state: ' + err);
+    }
+}
+
 let createNewHistoryTable = async (version) => {
     const sql = `CREATE TABLE history${version} (
         id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -74,7 +105,7 @@ let createNewHistoryTable = async (version) => {
 let seedHistoryTable = async (version, products) => {
     const sql = `INSERT INTO history${version} (name, price, ingredients, calories, quantity, url) 
                                         values ($1, $2, $3, $4, $5, $6)`;
-                                        
+
     try {
         for ( let product of products )
             await query(sql,[product.name, product.price, product.ingredients, 
