@@ -37,8 +37,8 @@ exports.createHistory = async (req, res) => {
     req.app.global.store();
 
     await createNewHistoryTable(counter);
-    
-    await seedHistoryTable(counter, req.body.products);
+
+    await seedHistoryTable(counter, req.body);
 
     await storeHistoryTableVersion(counter);
 
@@ -74,14 +74,14 @@ let createNewHistoryTable = async (version) => {
 let seedHistoryTable = async (version, products) => {
     const sql = `INSERT INTO history${version} (name, price, ingredients, calories, quantity, url) 
                                         values ($1, $2, $3, $4, $5, $6)`;
-
+                                        
     try {
         for ( let product of products )
             await query(sql,[product.name, product.price, product.ingredients, 
                             product.calories, product.quantity, product.url]);
     }
     catch (err) {
-        console.log('An error occured while seeding the history table' + err);
+        console.log('An error occured while seeding the history table: ' + err);
     }
 }
 
