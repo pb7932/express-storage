@@ -3,12 +3,10 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const {sequelize} = require('./db/index');
-const seed = require('./db/seed');
 
 
 //authentication to a database to be able to run queries
 sequelize.authenticate().then(console.log('[DB] Authentication completed.'));
-//seed().then(console.log('[DB] Seed completed.'));
 
 
 //console logging a request method and url
