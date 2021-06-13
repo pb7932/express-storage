@@ -8,7 +8,7 @@ router.get('/', products.findAll);
 router.get('/:id', products.findById);
 
 router.post('/',
-        body('name').not().isEmpty().isAlpha().isLength({min: 2, max: 50}),
+        body('name').not().isEmpty().isLength({min: 2, max: 50}),
         body('price').not().isEmpty().isNumeric(),
         body('ingredients').not().isEmpty().isLength({min:2, max: 100}),
         body('calories').not().isEmpty().isNumeric(),
@@ -17,7 +17,7 @@ router.post('/',
         products.create);
 
 router.put('/:id',
-        body('name').not().isEmpty().isAlpha().isLength({min: 2, max: 50}),
+        body('name').not().isEmpty().isLength({min: 2, max: 50}),
         body('price').not().isEmpty().isNumeric(),
         body('ingredients').not().isEmpty().isLength({min:2, max: 100}),
         body('calories').not().isEmpty().isNumeric(),

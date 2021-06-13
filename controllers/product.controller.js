@@ -75,7 +75,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('error');
+        console.log({errors: errors.array()});
       return res.status(400).json({ errors: errors.array() });
     }
 

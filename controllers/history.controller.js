@@ -7,7 +7,7 @@ exports.getHistory = async (req, res) => {
 
     if(counter && counter > 0) {
         let version = (req.query.version <= counter && req.query.version > 0) ? req.query.version : counter;
-        
+        console.log('counter from fetching: ' + counter)
         let result = await dbGetHistory(version);
 
         res.send(result);
@@ -35,14 +35,14 @@ exports.createHistory = async (req, res) => {
 
     let counter = ++req.app.global.data.counter;
     req.app.global.store();
-
+    console.log('counter from creation: ' + counter)
     await createNewHistoryTable(counter);
 
     await seedHistoryTable(counter, req.body);
 
     await storeHistoryTableVersion(counter);
 
-    res.send('counter: ' + counter);
+    res.send({});
 }
 
 exports.initCounter = (req, res, next) => {
@@ -76,7 +76,7 @@ exports.initHistoryState = async (req, res) => {
         req.app.global.data.counter = 0;
         req.app.global.store();
 
-        res.send(200);
+        res.sendStatus(200);
     }
     catch (err) {
         console.log('An error occured while initializing history state: ' + err);
