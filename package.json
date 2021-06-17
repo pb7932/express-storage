@@ -4,7 +4,8 @@
   "description": "Connectiong angular-storage with Postgres",
   "main": "server.js",
   "scripts": {
-    "run": "node server.js",
+    "dev": "node server.js",
+    "seed": "node db/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
