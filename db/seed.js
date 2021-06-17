@@ -1,6 +1,6 @@
 const {sequelize} = require('./index');
 const Product = require('../models/Product');
-
+const {query} = require ('./index');
 
 (async () => {
     try {
@@ -24,8 +24,24 @@ const Product = require('../models/Product');
         quantity: 1, url: "https://shop.studenac.hr/media/catalog/product/cache/de7a167639975b37ce148c87d1f24600/0/0/004102-schweppes-tangerine-0_5-l.png"});
 
         const prod5 = await Product.create({name: "Schweppes-Tonic", price: 15, ingredients: "sugar,secret-sauce,bitterness", calories: 200, quantity: 1, url: "https://mk0galerieanaln1fb7y.kinstacdn.com/wp-content/uploads/2020/05/tonic.jpg"});
+
+        await createHistoryVersionTable();
     }
     catch (err) {
         console.log(err);
     }
 })()
+
+let createHistoryVersionTable = async () => {
+    const sql = `CREATE TABLE history_version (
+                                version SMALLINT NOT NULL, 
+                                date DATE NOT NULL,
+                                CONSTRAINT pkHistoryVersion PRIMARY KEY (version,date)
+                                )`
+    try {
+        await query(sql, []);
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
